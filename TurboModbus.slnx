@@ -1,0 +1,5 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/TurboModbus/TurboModbus.csproj" />
+  </Folder>
+</Solution>

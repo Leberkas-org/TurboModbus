@@ -1,0 +1,9 @@
+bin/
+obj/
+*.user
+*.suo
+.vs/
+*.nupkg
+node_modules/
+docs/.vitepress/dist/
+docs/.vitepress/cache/
