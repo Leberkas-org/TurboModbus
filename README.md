@@ -1,6 +1,6 @@
 
 # TurboModbus
-![turboModbus](logo.svg)
+![turboModbus](https://raw.githubusercontent.com/Leberkas-org/TurboModbus/refs/heads/master/logo_wide.png)
 
 High-performance Modbus TCP client built on [Akka.Streams](https://getakka.net/articles/streams/introduction.html). Clean async API for simple use cases, raw stream access for reactive pipelines.
 
