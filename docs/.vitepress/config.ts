@@ -4,7 +4,7 @@ import { withLikeC4 } from '@leberkas-org/vitepress-likec4'
 export default withLikeC4({ likec4: { source: './likec4' } }, defineConfig({
   title: 'TurboModbus',
   description: 'High-performance Modbus TCP client built on Akka.Streams',
-  base: '/TurboModbus/',
+  base: '/',
   appearance: 'dark',
   themeConfig: {
     logo: { light: '/logo.svg', dark: '/logo-dark.svg' },
