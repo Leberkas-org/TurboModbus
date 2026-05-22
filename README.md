@@ -1,4 +1,6 @@
+
 # TurboModbus
+![turboModbus](logo.svg)
 
 High-performance Modbus TCP client built on [Akka.Streams](https://getakka.net/articles/streams/introduction.html). Clean async API for simple use cases, raw stream access for reactive pipelines.
 
@@ -96,7 +98,3 @@ For full control, use `ModbusCodec` directly:
 // Get a Flow<ReadRequest, RegisterResponse> connected to a device
 var readFlow = ModbusCodec.ReadFlow(system, "192.168.1.100", 502, unitId: 1);
 ```
-
-## License
-
-Apache 2.0
