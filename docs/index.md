@@ -4,6 +4,10 @@ hero:
   name: TurboModbus
   text: Modbus TCP on Akka.Streams
   tagline: Clean async API for simple use, raw streams for reactive pipelines.
+  image:
+    light: /logo_square.svg
+    dark: /logo_square-dark.svg
+    alt: TurboModbus
   actions:
     - theme: brand
       text: Get Started

@@ -2,18 +2,7 @@
 
 ## Stream Pipeline
 
-```
-ModbusClient
-  -> StreamOwnerActor (owns stream lifecycle)
-      -> Source.Queue<ModbusRequest>
-          -> ModbusCodec BidiFlow
-              -> Encode: ModbusRequest -> MBAP frame (ByteString)
-              -> TCP.OutgoingConnection
-              -> MbapFramingStage: ByteString -> complete MBAP frames
-              -> Decode: MBAP frame -> ModbusResponse
-          -> Sink.ForEach: route response back to actor
-      -> Transaction ID correlation -> reply to original Ask sender
-```
+<likec4-view view-id="streamPipeline"></likec4-view>
 
 ## Key Components
 

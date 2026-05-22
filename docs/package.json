@@ -8,6 +8,8 @@
     "preview": "vitepress preview"
   },
   "devDependencies": {
+    "@leberkas-org/vitepress-likec4": "^0.1.0",
+    "likec4": "^1.56.0",
     "vitepress": "^1.6.0"
   }
 }

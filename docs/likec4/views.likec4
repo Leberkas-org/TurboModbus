@@ -1,0 +1,67 @@
+views {
+
+  view index {
+    title "TurboModbus Overview"
+    include
+      userCode,
+      turboModbus,
+      modbusDevice
+
+    style turboModbus {
+      color indigo
+    }
+  }
+
+  view streamPipeline of turboModbus {
+    title "Stream Pipeline"
+    include
+      *,
+      userCode,
+      modbusDevice
+
+    exclude
+      turboModbus.pollBuilder,
+      turboModbus.changeDetection
+
+    style turboModbus.bidiFlow {
+      color indigo
+    }
+  }
+
+  view bidiFlow of turboModbus.bidiFlow {
+    title "ModbusCodec BidiFlow"
+    include
+      *,
+      turboModbus.sourceQueue,
+      turboModbus.tcpConnection,
+      turboModbus.sink
+
+    style turboModbus.bidiFlow.encode {
+      color sky
+    }
+    style turboModbus.bidiFlow.decode {
+      color sky
+    }
+    style turboModbus.bidiFlow.mbapFraming {
+      color amber
+    }
+  }
+
+  view polling of turboModbus {
+    title "Polling Pipeline"
+    include
+      userCode,
+      turboModbus.client,
+      turboModbus.pollBuilder,
+      turboModbus.changeDetection,
+      modbusDevice
+
+    style turboModbus.pollBuilder {
+      color green
+    }
+    style turboModbus.changeDetection {
+      color amber
+    }
+  }
+
+}

@@ -1,10 +1,14 @@
 import { defineConfig } from 'vitepress'
+import { withLikeC4 } from '@leberkas-org/vitepress-likec4'
 
-export default defineConfig({
+export default withLikeC4({ likec4: { source: './likec4' } }, defineConfig({
   title: 'TurboModbus',
   description: 'High-performance Modbus TCP client built on Akka.Streams',
   base: '/TurboModbus/',
+  appearance: 'dark',
   themeConfig: {
+    logo: { light: '/logo.svg', dark: '/logo-dark.svg' },
+    siteTitle: false,
     nav: [
       { text: 'Guide', link: '/getting-started' },
       { text: 'API', link: '/api' },
@@ -24,6 +28,7 @@ export default defineConfig({
         items: [
           { text: 'API', link: '/api' },
           { text: 'Architecture', link: '/architecture' },
+          { text: 'TurboModbus vs NModbus', link: '/comparison' },
         ],
       },
     ],
@@ -34,4 +39,4 @@ export default defineConfig({
       message: 'Released under the Apache 2.0 License.',
     },
   },
-})
+}))

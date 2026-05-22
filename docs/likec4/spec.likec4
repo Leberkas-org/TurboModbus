@@ -1,0 +1,52 @@
+specification {
+
+  element actor {
+    style {
+      shape rectangle
+      color amber
+    }
+  }
+
+  element component {
+    style {
+      shape rectangle
+      color slate
+    }
+  }
+
+  element stage {
+    style {
+      shape rectangle
+      color sky
+    }
+  }
+
+  element codec {
+    style {
+      shape rectangle
+      color indigo
+    }
+  }
+
+  element transport {
+    style {
+      shape cylinder
+      color red
+    }
+  }
+
+  element external {
+    style {
+      shape rectangle
+      color green
+    }
+  }
+
+  element api {
+    style {
+      shape rectangle
+      color muted
+    }
+  }
+
+}

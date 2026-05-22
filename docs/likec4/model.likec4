@@ -1,0 +1,81 @@
+model {
+
+  userCode = external "Your Application" {
+    description "User code calling ReadAsync / WriteAsync"
+  }
+
+  modbusDevice = external "Modbus Device" {
+    description "PLC, sensor, or other Modbus TCP slave"
+  }
+
+  turboModbus = component "TurboModbus" {
+    description "High-performance Modbus TCP client on Akka.Streams"
+
+    client = api "ModbusClient" {
+      description "Public API: ReadAsync, WriteAsync, Poll"
+    }
+
+    streamOwner = actor "StreamOwnerActor" {
+      description "Owns stream lifecycle, assigns Transaction IDs, correlates responses"
+    }
+
+    sourceQueue = stage "Source.Queue" {
+      description "Backpressure-aware buffer (default 256)"
+    }
+
+    bidiFlow = codec "ModbusCodec BidiFlow" {
+      description "Encodes requests to MBAP frames, decodes responses"
+
+      encode = stage "Encode" {
+        description "ModbusRequest -> MBAP frame ByteString (FC3/4/6/16)"
+      }
+
+      decode = stage "Decode" {
+        description "MBAP frame ByteString -> ModbusResponse"
+      }
+
+      mbapFraming = stage "MbapFramingStage" {
+        description "Length-based TCP framing: reassembles partial reads into complete MBAP frames"
+      }
+    }
+
+    tcpConnection = transport "TCP.OutgoingConnection" {
+      description "Akka.IO TCP transport with backpressure"
+    }
+
+    sink = stage "Sink.ForEach" {
+      description "Bridges stream back to actor via Tell"
+    }
+
+    pollBuilder = component "PollBuilder" {
+      description "Fluent API: interval-based polling Source with optional change detection"
+    }
+
+    changeDetection = stage "ChangeDetectionStage" {
+      description "Filters unchanged register values"
+    }
+  }
+
+  // Main request flow
+  userCode -> turboModbus.client "ReadAsync / WriteAsync"
+  turboModbus.client -> turboModbus.streamOwner "Ask<ReadRequest | WriteRequest>"
+  turboModbus.streamOwner -> turboModbus.sourceQueue "OfferAsync(ModbusRequest)"
+  turboModbus.sourceQueue -> turboModbus.bidiFlow.encode "ModbusRequest"
+  turboModbus.bidiFlow.encode -> turboModbus.tcpConnection "ByteString (MBAP frame)"
+
+  // Response flow
+  turboModbus.tcpConnection -> turboModbus.bidiFlow.mbapFraming "ByteString (TCP chunks)"
+  turboModbus.bidiFlow.mbapFraming -> turboModbus.bidiFlow.decode "ByteString (complete frame)"
+  turboModbus.bidiFlow.decode -> turboModbus.sink "ModbusResponse"
+  turboModbus.sink -> turboModbus.streamOwner "Tell(ModbusResponse)"
+  turboModbus.streamOwner -> turboModbus.client "Reply(RegisterResponse)"
+  turboModbus.client -> userCode "Task<RegisterResponse>"
+
+  // TCP to device
+  turboModbus.tcpConnection -> modbusDevice "Modbus TCP"
+
+  // Polling flow
+  userCode -> turboModbus.pollBuilder "Poll(interval, config)"
+  turboModbus.pollBuilder -> turboModbus.client "ReadAsync on timer"
+  turboModbus.pollBuilder -> turboModbus.changeDetection "Source<RegisterResponse>"
+}

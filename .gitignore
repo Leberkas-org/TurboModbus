@@ -7,3 +7,4 @@ obj/
 node_modules/
 docs/.vitepress/dist/
 docs/.vitepress/cache/
+docs/public/likec4-views.js
